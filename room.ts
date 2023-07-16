@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { Client } from "./client";
 
-interface Message {
+export interface Message {
   client: Client;
   message: string;
 }
