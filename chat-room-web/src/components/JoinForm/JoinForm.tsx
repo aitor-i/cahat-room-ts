@@ -1,7 +1,11 @@
 import axios from "axios";
 
-import { FormEvent } from "react";
+import { FormEvent, useContext } from "react";
 import { RoomData } from "../Chat/Chat";
+import {
+  JoinContext,
+  JoinContextInterface,
+} from "../../contexts/join-context/JoinContext";
 
 interface JoinData {
   username: string;
@@ -9,7 +13,9 @@ interface JoinData {
 }
 
 export const JoinForm = () => {
-  const socket = new WebSocket("ws://localhost:5004");
+  const { roomData, setRoomData } =
+    useContext<JoinContextInterface>(JoinContext);
+  if (!setRoomData) throw new Error("No context");
 
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -30,9 +36,10 @@ export const JoinForm = () => {
 
     console.log(res.data);
 
-    const roomData = JSON.stringify(res.data);
+    const { roomId, roomName: rName, userId }: RoomData = res.data;
+    setRoomData({ roomId, roomName: rName, userId });
 
-    window.localStorage.setItem("room-data", roomData);
+    console.log("roomData", roomData);
   };
 
   return (

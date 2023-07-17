@@ -1,23 +1,32 @@
-import { useState } from "react";
-import { Chat } from "./components/Chat/Chat";
+import { useContext, useState } from "react";
+import { Chat, RoomData } from "./components/Chat/Chat";
 import { JoinForm } from "./components/JoinForm/JoinForm";
+import {
+  JoinContext,
+  JoinContextInterface,
+} from "./contexts/join-context/JoinContext";
 
 function App() {
-  const roomData = window.localStorage.getItem("room-data");
+  const { roomData, setRoomData } =
+    useContext<JoinContextInterface>(JoinContext);
+  if (!setRoomData) throw new Error("No context");
+
+  console.log("roomData", roomData);
 
   const logOutHandler = () => {
+    setRoomData({} as RoomData);
     window.localStorage.removeItem("room-data");
   };
 
-  console.log(roomData);
+  const isRoomData = Object.keys(roomData!).length === 0;
   return (
     <div className="flex flex-col bg-gray-50-50">
       <h1 className="bg-purple-800 w-screen text-4xl font-bold p-5 pl-12 text-gray-50">
         {" "}
         Chat Rooms
       </h1>
-      {roomData ? (
-        <div>
+      {!isRoomData ? (
+        <div className="flex flex-col ml-10 mt-8">
           <Chat />
           <button
             onClick={logOutHandler}
