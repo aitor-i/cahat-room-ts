@@ -1,2 +1,6 @@
 /node_modules
 /dist
+/chat-client-terminal/.vs
+/chat-client-terminal/.vscode
+/chat-client-terminal/bin
+/chat-client-terminal/obj
