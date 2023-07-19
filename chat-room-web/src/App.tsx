@@ -1,10 +1,11 @@
-import { useContext, useState } from "react";
-import { Chat, RoomData } from "./components/Chat/Chat";
+import { useContext } from "react";
+import { Chat } from "./components/Chat/Chat";
 import { JoinForm } from "./components/JoinForm/JoinForm";
 import {
   JoinContext,
   JoinContextInterface,
 } from "./contexts/join-context/JoinContext";
+import { RoomData } from "./components/Chat/useChat";
 
 function App() {
   const { roomData, setRoomData } =
