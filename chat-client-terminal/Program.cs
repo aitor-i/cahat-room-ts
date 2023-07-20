@@ -8,26 +8,35 @@ using System.Text.Json;
 
 namespace chat_client_terminal
 {
-
-
     class Program
     {
-        static string RoomId{ get; set; }
-        static string UserId { get; set; }
+      
 
-        static  void  Main(string[] args)
+        static void Main(string[] args)
         {
-            
-       
-                ChatApp();
-            
-            
-
+            ChatRun();
         }
-        static void ChatApp (){
+
+        static async void ChatRun()
+        {
+            try
+            {
+                await ChatApp();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("******************");
+                Console.WriteLine("An error ocurred");
+                Console.WriteLine("******************");
+                Console.WriteLine(ex.Message.ToString());
+            }
+        }
+
+        static async Task ChatApp() {
             Console.WriteLine("# ######################### #");
             Console.WriteLine("# Hello this is chat rooms! #");
-            Console.WriteLine("# ######################### # \n \n" );
+            Console.WriteLine("# ######################### # \n \n");
 
             Console.WriteLine("Please enter your name: ");
             string username = Console.ReadLine();
@@ -36,14 +45,28 @@ namespace chat_client_terminal
             Console.WriteLine("Please enter a room name: ");
             string roomName = Console.ReadLine();
 
-            Program.postJoinData(username, roomName);
+            var responseData = await PostJoinData(username, roomName);
 
-            Console.WriteLine(roomName);
+            var webSocketClient = new WebSocketClient(responseData.userId, responseData.roomId);
+            await webSocketClient.Connect();
+
+            while (true)
+            {
+                Console.WriteLine("Send a message: ");
+                string message = Console.ReadLine();
+                await webSocketClient.SendMessage(message);
+
+            }
+
+
         }
 
-        static async void  postJoinData (string username, string roomName){
+
+
+        static async Task<JoinResponseVewModel> PostJoinData (string username, string roomName){
 
             HttpClient httpClient = new HttpClient();
+            JoinResponseVewModel responseObject = new JoinResponseVewModel();
 
 
             try
@@ -52,29 +75,28 @@ namespace chat_client_terminal
                     username = username,
                     roomName = roomName
                 };
-
                 string jsonString = JsonSerializer.Serialize(reqObject);
                 string apiUrl =  "http://localhost:5004/join";
 
 
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, apiUrl);
                 request.Headers.Add("Accept", "application/json");
-
-
-
                 var content = new StringContent( jsonString , Encoding.UTF8, "application/json");
                 request.Content = content;
 
-                HttpResponseMessage response = await httpClient.SendAsync(request);
+                HttpResponseMessage response;
+
+                    HttpResponseMessage res = await httpClient.SendAsync(request);
+                    response = res;
+                Console.WriteLine(response.IsSuccessStatusCode);
 
                 if (response.IsSuccessStatusCode)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
 
-                    JoinResponseVewModel responseObject = JsonSerializer.Deserialize<JoinResponseVewModel>(responseContent);
-                    Program.UserId = responseObject.userId;
-                    Program.RoomId = responseObject.roomId;
+                     responseObject =  JsonSerializer.Deserialize<JoinResponseVewModel>(responseContent);
 
+                    
 
                     if (responseObject.messages.ToArray().Length != 0)
                     {
@@ -110,6 +132,7 @@ namespace chat_client_terminal
             }
 
             
+            return responseObject;
 
         }
     }
