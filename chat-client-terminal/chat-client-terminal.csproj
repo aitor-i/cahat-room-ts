@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>chat_client_terminal</RootNamespace>
+    <!--<PackageReference Include="System.Net.Http" Version="4.3.4" />-->
   </PropertyGroup>
 
 </Project>
