@@ -4,3 +4,8 @@
 /chat-client-terminal/.vscode
 /chat-client-terminal/bin
 /chat-client-terminal/obj
+
+/dotnet-client/.vs
+/dotnet-client/.vscode
+/dotnet-client/bin
+/dotnet-client/obj
