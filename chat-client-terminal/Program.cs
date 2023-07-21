@@ -14,13 +14,18 @@ namespace chat_client_terminal
 
         static void Main(string[] args)
         {
-            ChatRun();
+            while (true)
+            {
+                ChatRun();
+
+            }
         }
 
         static async void ChatRun()
         {
             try
             {
+               
                 await ChatApp();
 
             }
@@ -45,9 +50,24 @@ namespace chat_client_terminal
             Console.WriteLine("Please enter a room name: ");
             string roomName = Console.ReadLine();
 
-            var responseData = await PostJoinData(username, roomName);
+            PostObject dataToPost = new PostObject
+            {
+                DataToPost = new {username, roomName },
+                Endpoint = "/join"
+            };
+            ApiConnection apiConnection = new ApiConnection("http://localhost:5004");
+            var postResponse = await apiConnection.PostData(dataToPost);
+            var data = await postResponse.ReadAsStringAsync();
+            JoinResponseVewModel responseObject = JsonSerializer.Deserialize<JoinResponseVewModel>(data);
 
-            var webSocketClient = new WebSocketClient(responseData.userId, responseData.roomId);
+            foreach (Message message in responseObject.messages)
+            {
+                Console.WriteLine($"{message.client.name}:   {message.message}");
+            }
+
+
+
+            var webSocketClient = new WebSocketClient(responseObject.userId, responseObject.roomId);
             await webSocketClient.Connect();
 
             while (true)
@@ -136,4 +156,5 @@ namespace chat_client_terminal
 
         }
     }
+    
 }
