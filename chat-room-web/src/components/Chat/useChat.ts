@@ -18,7 +18,11 @@ export const useChat = () => {
   const [socket, setSocket] = useState<WebSocket>();
   const [message, setMessage] = useState<Message[]>([]);
 
-  if (message.length === 0 && roomData?.prevMessages) {
+  if (
+    message.length === 0 &&
+    roomData?.prevMessages &&
+    roomData.prevMessages.length !== 0
+  ) {
     setMessage(roomData.prevMessages);
   }
 
