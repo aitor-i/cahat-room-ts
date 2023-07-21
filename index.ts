@@ -20,6 +20,32 @@ const port = 5004;
 
 const rooms: Room[] = [];
 
+function joinRoom(username: string, roomName: string) {
+  let room = rooms.find((room) => room.getName() === roomName);
+  if (!room) {
+    const newRoom = new Room(roomName);
+    rooms.push(newRoom);
+    room = newRoom;
+  }
+
+  let client = room
+    .getClients()
+    .find((client) => client.getName() === username);
+
+  if (!client) {
+    client = new Client(username);
+    room.addClient(client);
+  }
+
+  const roomData: ChatRoomData = {
+    roomId: room.getId(),
+    userId: client.getId(),
+    messages: room.getMessages(),
+  };
+
+  return roomData;
+}
+
 const server = app.listen(port, () => {
   console.log(`listening at port: ${port}`);
 });
@@ -57,7 +83,6 @@ wss.on("connection", (ws: WebSocket) => {
     const messagesString = JSON.stringify(room.getMessages());
     ws.send(messagesString);
   });
-
   ws.on("close", () => {
     console.log("Client disconnected");
   });
@@ -68,6 +93,7 @@ wss.on("error", (error: Error) => {
 });
 
 app.get("/", (req, res) => {
+  console.log("Get called");
   res.send(`WebSocket server is running on port ${port}! `);
 });
 
@@ -80,6 +106,7 @@ app.post("/join", (req, res) => {
   console.log("Join");
 
   try {
+    console.log("req.body", req.body);
     const { roomName, username }: JoinData = req.body;
     console.log(roomName, username);
 
@@ -103,11 +130,24 @@ app.post("/join", (req, res) => {
       roomId: room.getId(),
       userId: client.getId(),
       roomName: room.getName(),
+      messages: room.getMessages(),
     });
   } catch (error) {
     res.status(500).send(error);
   }
 });
+
+app.use("*", (req, res) => {
+  console.log("Not found");
+  console.log(req.url);
+
+  res.status(404).send("Not Found");
+});
+interface ChatRoomData {
+  roomId: string;
+  userId: string;
+  messages: Message[];
+}
 
 // const socket = new WebSocket("ws://localhost:5004");
 
