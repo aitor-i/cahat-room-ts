@@ -57,6 +57,12 @@ namespace chat_client_terminal
             Program.RoomName = roomName;
         }
 
+        class JoinObject
+        {
+            public string username { get; set; }
+            public string roomName { get; set; }
+        }
+
         static async Task ChatApp() {
 
             PrintTitle();
@@ -64,7 +70,7 @@ namespace chat_client_terminal
 
             PostObject dataToPost = new PostObject
             {
-                DataToPost = new {Program.Username, Program.RoomName },
+                DataToPost = new JoinObject {username=Program.Username, roomName = Program.RoomName },
                 Endpoint = "/join"
             };
             ApiConnection apiConnection = new ApiConnection("http://localhost:5004");
