@@ -1,5 +1,6 @@
-websocket-server/node_modules
-/dist
+/websocket-server/node_modules
+/websocket-server/dist
+
 /chat-client-terminal/.vs
 /chat-client-terminal/.vscode
 /chat-client-terminal/bin
