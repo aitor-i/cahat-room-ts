@@ -10,3 +10,5 @@
 /dotnet-client/.vscode
 /dotnet-client/bin
 /dotnet-client/obj
+
+/dotnet-client
