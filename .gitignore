@@ -1,4 +1,4 @@
-/node_modules
+websocket-server/node_modules
 /dist
 /chat-client-terminal/.vs
 /chat-client-terminal/.vscode
