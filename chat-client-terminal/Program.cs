@@ -10,7 +10,9 @@ namespace chat_client_terminal
 {
     class Program
     {
-      
+        static string Username { get; set; }
+        static string RoomName { get; set; }
+
 
         static void Main(string[] args)
         {
@@ -24,10 +26,8 @@ namespace chat_client_terminal
         static async void ChatRun()
         {
             try
-            {
-               
+            {              
                 await ChatApp();
-
             }
             catch (Exception ex)
             {
@@ -38,11 +38,14 @@ namespace chat_client_terminal
             }
         }
 
-        static async Task ChatApp() {
+        static void PrintTitle()
+        {
             Console.WriteLine("# ######################### #");
             Console.WriteLine("# Hello this is chat rooms! #");
             Console.WriteLine("# ######################### # \n \n");
-
+        }
+        static void CollectUsernameAndRoomName()
+        {
             Console.WriteLine("Please enter your name: ");
             string username = Console.ReadLine();
 
@@ -50,9 +53,18 @@ namespace chat_client_terminal
             Console.WriteLine("Please enter a room name: ");
             string roomName = Console.ReadLine();
 
+            Program.Username = username;
+            Program.RoomName = roomName;
+        }
+
+        static async Task ChatApp() {
+
+            PrintTitle();
+            CollectUsernameAndRoomName();
+
             PostObject dataToPost = new PostObject
             {
-                DataToPost = new {username, roomName },
+                DataToPost = new {Program.Username, Program.RoomName },
                 Endpoint = "/join"
             };
             ApiConnection apiConnection = new ApiConnection("http://localhost:5004");
