@@ -65,8 +65,12 @@ namespace chat_client_terminal
 
         static async Task ChatApp() {
 
-            PrintTitle();
-            CollectUsernameAndRoomName();
+            if(Username==null && RoomName == null)
+            {
+                PrintTitle();
+                CollectUsernameAndRoomName();
+
+            }
 
             PostObject dataToPost = new PostObject
             {
@@ -83,20 +87,60 @@ namespace chat_client_terminal
                 Console.WriteLine($"{message.client.name}:   {message.message}");
             }
 
+            Task chatActionsPromese = ChatActions(responseObject.userId, responseObject.roomId);
+            await Task.WhenAll(chatActionsPromese);
+            Console.WriteLine("^^^^^ Chat pass!!! ^^^^^^^");
+
+            //var wsClient = new NewWSClient(responseObject.userId, responseObject.roomId);
+
+            //await wsClient.Connect();
+            
+            //while (true)
+            //{
+
+            //   await wsClient.StartReceiving();
+            //    Console.WriteLine("========");
+            //    //wsClient.StartSending();
+
+            //}
+
+            
+
+            //var webSocketClient = new WebSocketClient(responseObject.userId, responseObject.roomId);
+            //await webSocketClient.Connect();
+
+            //while (true)
+            //{
+            //    Console.WriteLine("Send a message: ");
+            //    string message = Console.ReadLine();
+            //    await webSocketClient.SendMessage(message);
+
+            //}
 
 
-            var webSocketClient = new WebSocketClient(responseObject.userId, responseObject.roomId);
-            await webSocketClient.Connect();
+        }
 
-            while (true)
-            {
-                Console.WriteLine("Send a message: ");
-                string message = Console.ReadLine();
-                await webSocketClient.SendMessage(message);
+        static async Task ChatActions(string userId, string roomId)
+        {
+            var wsClient = new NewWSClient(userId, roomId);
 
-            }
+            Task coonectionPromise = wsClient.Connect();
+            await Task.WhenAll(coonectionPromise);
+            Console.WriteLine("Connected!!!");
 
 
+            Task sendingPromise = wsClient.StartSending();
+            Console.WriteLine("Waiting to send");
+
+            Task recievingPromise =  wsClient.StartReceiving();
+            Console.WriteLine("Waiting to message");
+            Task.WaitAll(recievingPromise);
+
+
+            await Task.WhenAll(recievingPromise, sendingPromise);
+            Console.WriteLine("========");
+
+            
         }
 
     }
