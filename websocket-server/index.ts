@@ -18,11 +18,13 @@ const port = 5004;
 
 const rooms: Room[] = [];
 
+const clients = new Set<WebSocket>();
+
 const server = app.listen(port, () => {
   console.log(`listening at port: ${port}`);
 });
 
-const wss = runWss(server, rooms);
+const wss = runWss(server, rooms, clients);
 
 app.get("/", (req, res) => {
   console.log("Get called");

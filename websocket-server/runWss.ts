@@ -6,10 +6,16 @@ import http from "http";
 // import {Server} from './index'
 import { Server, WebSocket } from "ws";
 
-export function runWss(server: http.Server, rooms: Room[]) {
+export function runWss(
+  server: http.Server,
+  rooms: Room[],
+  clients: Set<WebSocket>
+) {
   const wss = new WebSocket.Server({ server });
 
   wss.on("connection", (ws: WebSocket) => {
+    clients.add(ws);
+
     ws.on("message", (messageObject: string) => {
       console.log("New message!");
       console.log("rooms", rooms);
@@ -38,6 +44,13 @@ export function runWss(server: http.Server, rooms: Room[]) {
       console.log("Messages: \n", room.getMessages());
 
       const messagesString = JSON.stringify(room.getMessages());
+
+      clients.forEach((client) => {
+        if (client !== ws && client.readyState === WebSocket.OPEN) {
+          client.send(messagesString);
+        }
+      });
+
       ws.send(messagesString);
     });
     ws.on("close", () => {
