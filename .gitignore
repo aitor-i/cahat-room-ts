@@ -11,4 +11,8 @@
 /dotnet-client/bin
 /dotnet-client/obj
 
+/web-socket-client-terminal/WebsocketClient/.vs
+/web-socket-client-terminal/WebsocketClient/.vscode
+/web-socket-client-terminal/WebsocketClient/bin
+/web-socket-client-terminal/WebsocketClient/obj
 /dotnet-client
