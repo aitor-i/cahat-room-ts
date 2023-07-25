@@ -1,10 +1,9 @@
 import { useContext } from "react";
 import { Chat } from "./components/Chat/Chat";
+//import { Client } from "./client";
+
 import { JoinForm } from "./components/JoinForm/JoinForm";
-import {
-  JoinContext,
-  JoinContextInterface,
-} from "./contexts/join-context/JoinContext";
+import { JoinContext, JoinContextInterface} from "./contexts/join-context/JoinContext";
 import { RoomData } from "./components/Chat/useChat";
 
 function App() {

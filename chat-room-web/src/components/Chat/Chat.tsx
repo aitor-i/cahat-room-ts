@@ -10,7 +10,7 @@ export const Chat = () => {
     <div>
       {isRoomData && (
         <>
-          <h2 className="text-3xl font-bold mb-4">{roomData?.roomName}</h2>
+          <h2 className="text-3xl font-bold mb-4 ">{roomData?.roomName}</h2>
           <section>
             {message.map((message) => {
               const id = message.client.id as string;
