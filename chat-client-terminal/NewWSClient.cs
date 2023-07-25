@@ -12,11 +12,12 @@ namespace chat_client_terminal
 {
 	public class NewWSClient
 	{
-        public string ClientId { get; set; }
-        public string RoomId { get; set; }
-        public ClientWebSocket ClientWebSocket { get; set; }
+		public string ClientId { get; set; }
+		public string RoomId { get; set; }
+		public ClientWebSocket ClientWebSocket { get; set; }
 
-        public NewWSClient(string clientId,string roomId)
+		public NewWSClient(string clientId,string roomId)
+
         {
             ClientId = clientId;
             RoomId = roomId;
