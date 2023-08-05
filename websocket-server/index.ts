@@ -24,7 +24,7 @@ const server = app.listen(port, () => {
   console.log(`listening at port: ${port}`);
 });
 
-const wss = runWss(server, rooms, clients);
+runWss(server, rooms, clients);
 
 app.get("/", (req, res) => {
   console.log("Get called");
@@ -77,24 +77,3 @@ interface ChatRoomData {
   userId: string;
   messages: Message[];
 }
-
-// const socket = new WebSocket("ws://localhost:5004");
-
-// socket.on("open", () => {
-//   const messageObject: MessageObject = {
-//     message: "Hello!",
-//     clientId: "123",
-//     roomId: "123",
-//   };
-
-//   socket.send(JSON.stringify(messageObject));
-// });
-
-// socket.addEventListener("message", (message: WebSocket.MessageEvent) => {
-//   console.log("res: ", message.data);
-// });
-
-// socket.addEventListener("message", () => {
-
-//   //   console.log("Connected to the server!");
-// });
