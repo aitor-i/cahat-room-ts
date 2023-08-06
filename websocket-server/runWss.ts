@@ -1,14 +1,12 @@
-import {} from "express";
 import { MessageObject } from "./domain/MessageObject";
-import { Room, Message } from "./room";
+import {  Message } from "./room";
 import http from "http";
 
-// import {Server} from './index'
-import { Server, WebSocket } from "ws";
+import { rooms } from ".";
+import {  WebSocket } from "ws";
 
 export function runWss(
   server: http.Server,
-  rooms: Room[],
   clients: Set<WebSocket>
 ) {
   const wss = new WebSocket.Server({ server });
@@ -18,12 +16,12 @@ export function runWss(
 
     ws.on("message", (messageObject: string) => {
       console.log("New message!");
-      console.log("rooms", rooms);
+      console.log("rooms", rooms.getRooms());
 
       const parsedMessageObject: MessageObject = JSON.parse(messageObject);
       console.log("parsedMessageObject", parsedMessageObject);
 
-      const room = rooms.find(
+      const room = rooms.getRooms().find(
         (room) => room.getId() === parsedMessageObject.roomId
       );
       if (!room) throw new Error("Not room found");
