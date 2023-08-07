@@ -20,13 +20,13 @@ function App() {
 
   const isRoomData = Object.keys(roomData!).length === 0;
   return (
-    <div className="flex flex-col bg-gray-50-50">
+    <div className="flex min-h-screen  flex-col bg-gray-50-50">
       <h1 className="bg-purple-800 w-screen text-4xl font-bold p-5 pl-12 text-gray-50">
         {" "}
         Chat Rooms
       </h1>
       {!isRoomData ? (
-        <div className="flex flex-col ml-10 mt-8">
+        <div className="flex flex-1 justify-between   flex-col mr-10 ml-10 mt-8">
           <Chat />
           <button
             onClick={logOutHandler}
