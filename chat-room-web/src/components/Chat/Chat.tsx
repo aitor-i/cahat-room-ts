@@ -9,10 +9,10 @@ export const Chat = () => {
   return (
     <div className="flex-1 flex flex-col "> 
             {isRoomData && (
-                <div className = "flex-1 flex overflow-y-scroll flex-col justify-between  h-full">
+                <div className = "flex-1  flex-col justify-between  h-full">
                     <h2 className="text-3xl font-bold mb-4 ">{roomData?.roomName}</h2>
-                    <div className = "h-full flex-col  flex-1 justify-end flex">
-                        <section className="h-5/6">
+                    <div className = "h-full flex flex-col  flex-1 justify-end flex">
+                        <section className="h-96 overflow-y-scroll">
                             {message.map((message) => {
                                 const id = message.client.id as string;
                                 const idLastChar = id.charAt(id.length - 1);
@@ -24,16 +24,16 @@ export const Chat = () => {
                                     </div>
                                 );
                             })}
-                            <form className="mt-4" onSubmit={submitHandler}>
-                                <Input name="message" type="text" />
-                                <button
-                                    type="submit"
-                                    className=" p-1 pl-2 pe-2 bg-blue-600  rounded-lg text-gray-50 font-bold"
-                                >
-                                    Send
-                                </button>
-                            </form>
                         </section>
+                        <form className="mt-10 self-end " onSubmit={submitHandler}>
+                            <Input name="message" type="text" />
+                            <button
+                                type="submit"
+                                className=" p-1 pl-2 pe-2 bg-blue-600  rounded-lg text-gray-50 font-bold"
+                            >
+                                Send
+                            </button>
+                        </form>
                     </div>
                 </div>
             )}

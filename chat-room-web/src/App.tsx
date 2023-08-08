@@ -30,7 +30,7 @@ function App() {
           <Chat />
           <button
             onClick={logOutHandler}
-            className="w-1/3 mt-6 bg-red-400  p-2 rounded-lg text-gray-50 font-bold"
+            className="w-24 absolute top-16 right-8  mt-6 bg-red-400  p-2 rounded-lg text-gray-50 font-bold"
           >
             Log out
           </button>
